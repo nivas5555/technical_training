@@ -1,0 +1,111 @@
+import java.util.*;
+
+class Edge {
+    int from, to, weight;
+
+    Edge(int f, int t, int w) {
+        from = f;
+        to = t;
+        weight = w;
+    }
+}
+
+class DisjointSet {
+    ArrayList<Integer> parent, rank;
+
+    DisjointSet(int n) {
+        parent = new ArrayList<>();
+        rank = new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            parent.add(i);
+            rank.add(0);
+        }
+    }
+
+    int find(int u) {
+        if (parent.get(u) != u) {
+            parent.set(u, find(parent.get(u)));
+        }
+        return parent.get(u);
+    }
+
+    void unionSets(int u, int v) {
+        int rootU = find(u);
+        int rootV = find(v);
+
+        if (rank.get(rootU) < rank.get(rootV)) {
+            parent.set(rootU, rootV);
+        } else if (rank.get(rootU) > rank.get(rootV)) {
+            parent.set(rootV, rootU);
+        } else {
+            parent.set(rootU, rootV);
+            rank.set(rootV, rank.get(rootV) + 1);
+        }
+    }
+}
+
+public class Main {
+    public static int kruskals(int g_nodes, ArrayList<Integer> g_from, ArrayList<Integer> g_to, ArrayList<Integer> g_weight) {
+        int g_edges = g_from.size();
+        ArrayList<Edge> edges = new ArrayList<>();
+        for (int i = 0; i < g_edges; i++) {
+            edges.add(new Edge(g_from.get(i), g_to.get(i), g_weight.get(i)));
+        }
+
+        edges.sort(Comparator.comparingInt(a -> a.weight));
+
+        DisjointSet ds = new DisjointSet(g_nodes);
+
+        int totalWeight = 0;
+
+        for (Edge edge : edges) {
+            int rootFrom = ds.find(edge.from);
+            int rootTo = ds.find(edge.to);
+
+            if (rootFrom != rootTo) {
+                ds.unionSets(rootFrom, rootTo);
+                totalWeight += edge.weight;
+            }
+        }
+
+        return totalWeight;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of nodes and edges: ");
+        int g_nodes = scanner.nextInt();
+        int g_edges = scanner.nextInt();
+
+        ArrayList<Integer> g_from = new ArrayList<>();
+        ArrayList<Integer> g_to = new ArrayList<>();
+        ArrayList<Integer> g_weight = new ArrayList<>();
+
+        System.out.println("Enter the edges (from to weight):");
+        for (int i = 0; i < g_edges; i++) {
+            g_from.add(scanner.nextInt());
+            g_to.add(scanner.nextInt());
+            g_weight.add(scanner.nextInt());
+        }
+
+        int result = kruskals(g_nodes, g_from, g_to, g_weight);
+
+        System.out.println("Total weight of the minimum spanning tree: " + result);
+    }
+}
+
+
+
+
+/* Sample Output: 
+Enter the number of nodes and edges: 
+4 6
+Enter the edges (from to weight):
+1 2 5
+1 3 3
+4 1 6
+2 4 7
+3 2 4
+3 4 5
+Total weight of the minimum spanning tree: 12
+*/
