@@ -1,0 +1,50 @@
+import java.util.Scanner;
+
+public class Main {
+    public static long repeatedString(String s, long n) {
+        long countAInS = 0;
+        for (char ch : s.toCharArray()) {
+            if (ch == 'a') {
+                countAInS++;
+            }
+        }
+        
+        long completeRepeats = n / s.length();
+        long remainingChars = n % s.length();
+        
+        long countAInRemaining = 0;
+        for (int i = 0; i < remainingChars; i++) {
+            if (s.charAt(i) == 'a') {
+                countAInRemaining++;
+            }
+        }
+        
+        return (completeRepeats * countAInS) + countAInRemaining;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        System.out.println("Enter the string (s):");
+        String s = scanner.nextLine();
+        
+        System.out.println("Enter the number of characters to consider (n):");
+        long n = scanner.nextLong();
+        
+        long result = repeatedString(s, n);
+        System.out.println("Frequency of 'a' in the substring: " + result);
+        
+        scanner.close();
+    }
+}
+
+
+
+/* Sample Output:
+Enter the string (s):
+aba
+Enter the number of characters to consider (n):
+10
+Frequency of 'a' in the substring: 7
+
+ */
