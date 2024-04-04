@@ -1,0 +1,55 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class UnboundedKnapsack {
+
+    public static int unboundedKnapsack(int k, int[] arr) {
+        int[] dp = new int[k + 1];
+        for (int i = 1; i <= k; i++) {
+            for (int j = 0; j < arr.length; j++) {
+                if (arr[j] <= i) {
+                    dp[i] = Math.max(dp[i], dp[i - arr[j]] + arr[j]);
+                }
+            }
+        }
+        
+        int nearestSum = 0;
+        for (int i = k; i >= 0; i--) {
+            if (dp[i] <= k) {
+                nearestSum = dp[i];
+                break;
+            }
+        }
+        return nearestSum;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int t = scanner.nextInt();
+        while (t-- > 0) {
+            int n = scanner.nextInt();
+            int k = scanner.nextInt();
+            int[] arr = new int[n];
+            for (int i = 0; i < n; i++) {
+                arr[i] = scanner.nextInt();
+            }
+            int result = unboundedKnapsack(k, arr);
+            System.out.println("Maximum sum: " + result);
+        }
+        scanner.close();
+    }
+}
+
+
+
+
+/* Sample Output:
+
+2
+3 12
+1 6 9
+Maximum sum: 12
+5 9
+3 4 4 4 8
+Maximum sum: 9
+/*
