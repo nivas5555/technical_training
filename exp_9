@@ -1,0 +1,92 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class TSPNaive {
+
+    static int calculateCost(int[][] graph, int[] tour) {
+        int cost = 0;
+        int n = tour.length;
+        for (int i = 0; i < n - 1; i++) {
+            cost += graph[tour[i]][tour[i + 1]];
+        }
+        cost += graph[tour[n - 1]][tour[0]];
+        return cost;
+    }
+
+    static int travelingSalesmanNaive(int[][] graph, int start) {
+        int n = graph.length;
+        int[] tour = new int[n];
+        for (int i = 0; i < n; i++) {
+            tour[i] = i;
+        }
+        int minCost = Integer.MAX_VALUE;
+        do {
+            if (tour[0] == start && tour[n - 1] == start) {
+                int currentCost = calculateCost(graph, tour);
+                minCost = Math.min(minCost, currentCost);
+            }
+        } while (nextPermutation(tour));
+        return minCost;
+    }
+
+    static boolean nextPermutation(int[] array) {
+        int i = array.length - 2;
+        while (i >= 0 && array[i] >= array[i + 1]) {
+            i--;
+        }
+        if (i < 0) {
+            return false;
+        }
+        int j = array.length - 1;
+        while (array[j] <= array[i]) {
+            j--;
+        }
+        swap(array, i, j);
+        reverse(array, i + 1);
+        return true;
+    }
+
+    static void swap(int[] array, int i, int j) {
+        int temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+
+    static void reverse(int[] array, int start) {
+        int i = start, j = array.length - 1;
+        while (i < j) {
+            swap(array, i, j);
+            i++;
+            j--;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of cities: ");
+        int n = scanner.nextInt();
+        int[][] graph = new int[n][n];
+        System.out.println("Enter the adjacency matrix:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                graph[i][j] = scanner.nextInt();
+            }
+        }
+        System.out.print("Enter the starting city index: ");
+        int startCity = scanner.nextInt();
+        int minCost = travelingSalesmanNaive(graph, startCity);
+        System.out.println("Minimum cost of the tour: " + minCost);
+        scanner.close();
+    }
+}
+
+/* Sample Output:
+Enter the number of cities: 4
+Enter the adjacency matrix:
+0 10 15 20
+10 0 35 25
+15 35 0 30
+20 25 30 0
+Enter the starting city index: 0
+Minimum cost of the tour: 80
+*/
