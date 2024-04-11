@@ -1,0 +1,74 @@
+/* Aim:- Given a pointer to the head of a linked list, insert a new node before the head. The next value in the new node should point to head and the data value should be replaced with a given value. Return a reference to the new head of the list. The head pointer given may be null meaning that the initial list is empty.*/
+
+
+import java.util.Scanner;
+
+// Definition for singly-linked list node
+class SinglyLinkedListNode {
+    int data;
+    SinglyLinkedListNode next;
+
+    public SinglyLinkedListNode(int node_data) {
+        this.data = node_data;
+        this.next = null;
+    }
+}
+
+public class Main {
+    // Function to insert a node at the head of the linked list
+    static SinglyLinkedListNode insertNodeAtHead(SinglyLinkedListNode llist, int data) {
+        SinglyLinkedListNode newNode = new SinglyLinkedListNode(data);
+        
+        if (llist == null) {
+            // If the list is empty, the new node becomes the head
+            return newNode;
+        } else {
+            // Inserting the new node before the current head
+            newNode.next = llist;
+            // Update the head pointer to point to the new node
+            return newNode;
+        }
+    }
+
+    // Function to print the linked list
+    static void printLinkedList(SinglyLinkedListNode head) {
+        while (head != null) {
+            System.out.print(head.data + " ");
+            head = head.next;
+        }
+        System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter the number of elements to be inserted at the head: ");
+        int n = scanner.nextInt();
+
+        SinglyLinkedListNode head = null;
+
+        for (int i = 0; i < n; i++) {
+            System.out.print("Enter the element to be inserted: ");
+            int data = scanner.nextInt();
+            head = insertNodeAtHead(head, data);
+        }
+
+        System.out.print("Linked List after insertion: ");
+        printLinkedList(head);
+
+        scanner.close();
+    }
+}
+
+
+
+
+/* Example Output:
+
+Enter the number of elements to be inserted at the head: 5
+Enter the element to be inserted: 383
+Enter the element to be inserted: 484
+Enter the element to be inserted: 392
+Enter the element to be inserted: 975
+Enter the element to be inserted: 321
+Linked List after insertion: 321 975 392 484 383
+*/
